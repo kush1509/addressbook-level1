@@ -439,8 +439,8 @@ public class AddressBook {
     }
 
     /**
-     * Finds and lists all persons in address book whose name contains any of the argument keywords.
-     * Keyword matching is case sensitive.
+     * Finds and lists all persons in address book whose name starts with contains any of the argument keywords.
+     * Keyword matching is not case sensitive.
      *
      * @param commandArgs full command args string from the user
      * @return feedback display message for the operation result
@@ -476,10 +476,10 @@ public class AddressBook {
     }
 
     /**
-     * Retrieves all persons in the full model whose names contain some of the specified keywords.
+     * Retrieves all persons in the full model whose names start with or contain some of the specified keywords.
      *
      * @param keywords for searching
-     * @return list of persons in full model with name containing some of the keywords
+     * @return list of persons in full model with name starting with or containing some of the keywords
      */
     private static ArrayList<HashMap<String, String>> getPersonsWithNameContainingAnyKeyword(Collection<String> keywords) {
         final ArrayList<HashMap<String, String>> matchedPersons = new ArrayList<>();
