@@ -618,10 +618,27 @@ public class AddressBook {
     /**
      * Shows a message to the user
      */
-    private static void showToUser(String... message) {
-        for (String m : message) {
-            System.out.println(LINE_PREFIX + m);
-        }
+    private static void showToUser(String message) {
+        System.out.println(LINE_PREFIX + message);
+    }
+
+    private static void showToUser(String messageString1, String messageString2) {
+        System.out.println(LINE_PREFIX + messageString1);
+        System.out.println(LINE_PREFIX + messageString2);
+    }
+
+    private static void showToUser(String messageString1, String messageString2, String messageString3) {
+        System.out.println(LINE_PREFIX + messageString1);
+        System.out.println(LINE_PREFIX + messageString2);
+        System.out.println(LINE_PREFIX + messageString3);
+    }
+
+    private static void showToUser(String messageString1, String messageString2, String messageString3, String messageString4, String messageString5) {
+        System.out.println(LINE_PREFIX + messageString1);
+        System.out.println(LINE_PREFIX + messageString2);
+        System.out.println(LINE_PREFIX + messageString3);
+        System.out.println(LINE_PREFIX + messageString4);
+        System.out.println(LINE_PREFIX + messageString5);
     }
 
     /**
