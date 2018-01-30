@@ -183,7 +183,7 @@
 || Enter command: || [Command entered:  find adam Betsy]
 || 	1. Adam Brown  Phone Number: 111111  Email: adam@gmail.com
 || 	2. Betsy Choo  Phone Number: 222222  Email: benchoo@nus.edu.sg
-||
+|| 
 || 2 persons found!
 || ===================================================
 || Enter command: || [Command entered:  find 23912039120]
