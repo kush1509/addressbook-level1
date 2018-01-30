@@ -446,8 +446,11 @@ public class AddressBook {
      * @return feedback display message for the operation result
      */
     private static String executeFindPersons(String commandArgs) {
-        final Set<String> keywords = extractKeywordsFromFindPersonArgs(commandArgs);
-        final ArrayList<HashMap<String, String>> personsFound = getPersonsWithNameContainingAnyKeyword(keywords);
+        ArrayList<HashMap<String, String>> personsFound = new ArrayList<HashMap<String, String>>();
+        if(!commandArgs.equals("")) {
+            final Set<String> keywords = extractKeywordsFromFindPersonArgs(commandArgs);
+            personsFound = getPersonsWithNameContainingAnyKeyword(keywords);
+        }
         showToUser(personsFound);
         return getMessageForPersonsDisplayedSummary(personsFound);
     }
