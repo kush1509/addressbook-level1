@@ -482,8 +482,11 @@ public class AddressBook {
         final ArrayList<HashMap<String, String>> matchedPersons = new ArrayList<>();
         for (HashMap<String, String> person : getAllPersonsInAddressBook()) {
             final Set<String> wordsInName = new HashSet<>(splitByWhitespace(getNameFromPerson(person).toLowerCase()));
-            if (!Collections.disjoint(wordsInName, keywords)) {
-                matchedPersons.add(person);
+            for(String keyword: keywords) {
+                if(wordsInName.stream().anyMatch(word -> word.startsWith(keyword))) {
+                    matchedPersons.add(person);
+                    break;
+                }
             }
         }
         return matchedPersons;
