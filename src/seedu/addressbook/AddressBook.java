@@ -100,9 +100,9 @@ public class AddressBook {
 
     private static final String COMMAND_FIND_WORD = "find";
     private static final String COMMAND_FIND_DESC = "Finds all persons whose names contain any of the specified "
-                                        + "keywords (case-sensitive) and displays them as a list with index numbers.";
+                                        + "keywords and displays them as a list with index numbers.";
     private static final String COMMAND_FIND_PARAMETERS = "KEYWORD [MORE_KEYWORDS]";
-    private static final String COMMAND_FIND_EXAMPLE = COMMAND_FIND_WORD + " alice bob charlie";
+    private static final String COMMAND_FIND_EXAMPLE = COMMAND_FIND_WORD + " Alice bo C";
 
     private static final String COMMAND_LIST_WORD = "list";
     private static final String COMMAND_LIST_DESC = "Displays all persons as a list with index numbers.";
@@ -206,6 +206,11 @@ public class AddressBook {
         showWelcomeMessage();
         processProgramArgs(args);
         loadDataFromStorage();
+        processCommand();
+        return;
+    }
+
+    private static void processCommand() {
         while (true) {
             String userCommand = getUserInput();
             echoUserCommand(userCommand);
@@ -440,14 +445,17 @@ public class AddressBook {
 
     /**
      * Finds and lists all persons in address book whose name contains any of the argument keywords.
-     * Keyword matching is case sensitive.
+     * Keyword matching is case insensitive.
      *
      * @param commandArgs full command args string from the user
      * @return feedback display message for the operation result
      */
     private static String executeFindPersons(String commandArgs) {
-        final Set<String> keywords = extractKeywordsFromFindPersonArgs(commandArgs);
-        final ArrayList<HashMap<String, String>> personsFound = getPersonsWithNameContainingAnyKeyword(keywords);
+        ArrayList<HashMap<String, String>> personsFound = new ArrayList<HashMap<String, String>>();
+        if(!commandArgs.equals("")) {
+            final Set<String> keywords = extractKeywordsFromFindPersonArgs(commandArgs);
+            personsFound = getPersonsWithNameContainingAnyKeyword(keywords);
+        }
         showToUser(personsFound);
         return getMessageForPersonsDisplayedSummary(personsFound);
     }
@@ -469,7 +477,7 @@ public class AddressBook {
      * @return set of keywords as specified by args
      */
     private static Set<String> extractKeywordsFromFindPersonArgs(String findPersonCommandArgs) {
-        return new HashSet<>(splitByWhitespace(findPersonCommandArgs.trim()));
+        return new HashSet<>(splitByWhitespace(findPersonCommandArgs.trim().toLowerCase()));
     }
 
     /**
@@ -481,12 +489,19 @@ public class AddressBook {
     private static ArrayList<HashMap<String, String>> getPersonsWithNameContainingAnyKeyword(Collection<String> keywords) {
         final ArrayList<HashMap<String, String>> matchedPersons = new ArrayList<>();
         for (HashMap<String, String> person : getAllPersonsInAddressBook()) {
-            final Set<String> wordsInName = new HashSet<>(splitByWhitespace(getNameFromPerson(person)));
-            if (!Collections.disjoint(wordsInName, keywords)) {
-                matchedPersons.add(person);
-            }
+            containsKeywords(keywords, matchedPersons, person);
         }
         return matchedPersons;
+    }
+
+    private static void containsKeywords(Collection<String> keywords, ArrayList<HashMap<String, String>> matchedPersons, HashMap<String, String> person) {
+        final Set<String> wordsInName = new HashSet<>(splitByWhitespace(getNameFromPerson(person).toLowerCase()));
+        for(String keyword: keywords) {
+            if(wordsInName.stream().anyMatch(word -> word.startsWith(keyword))) {
+                matchedPersons.add(person);
+                break;
+            }
+        }
     }
 
     /**
