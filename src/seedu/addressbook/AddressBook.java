@@ -99,7 +99,7 @@ public class AddressBook {
     private static final String COMMAND_ADD_EXAMPLE = COMMAND_ADD_WORD + " John Doe p/98765432 e/johnd@gmail.com";
 
     private static final String COMMAND_FIND_WORD = "find";
-    private static final String COMMAND_FIND_DESC = "Finds all persons whose names start with or contain any of the specified "
+    private static final String COMMAND_FIND_DESC = "Finds all persons whose names contain any of the specified "
                                         + "keywords and displays them as a list with index numbers.";
     private static final String COMMAND_FIND_PARAMETERS = "KEYWORD [MORE_KEYWORDS]";
     private static final String COMMAND_FIND_EXAMPLE = COMMAND_FIND_WORD + " Alice bo C";
@@ -206,6 +206,11 @@ public class AddressBook {
         showWelcomeMessage();
         processProgramArgs(args);
         loadDataFromStorage();
+        processCommand();
+        return;
+    }
+
+    private static void processCommand() {
         while (true) {
             String userCommand = getUserInput();
             echoUserCommand(userCommand);
@@ -439,8 +444,8 @@ public class AddressBook {
     }
 
     /**
-     * Finds and lists all persons in address book whose name starts with contains any of the argument keywords.
-     * Keyword matching is not case sensitive.
+     * Finds and lists all persons in address book whose name contains any of the argument keywords.
+     * Keyword matching is case insensitive.
      *
      * @param commandArgs full command args string from the user
      * @return feedback display message for the operation result
@@ -476,23 +481,27 @@ public class AddressBook {
     }
 
     /**
-     * Retrieves all persons in the full model whose names start with or contain some of the specified keywords.
+     * Retrieves all persons in the full model whose names contain some of the specified keywords.
      *
      * @param keywords for searching
-     * @return list of persons in full model with name starting with or containing some of the keywords
+     * @return list of persons in full model with name containing some of the keywords
      */
     private static ArrayList<HashMap<String, String>> getPersonsWithNameContainingAnyKeyword(Collection<String> keywords) {
         final ArrayList<HashMap<String, String>> matchedPersons = new ArrayList<>();
         for (HashMap<String, String> person : getAllPersonsInAddressBook()) {
-            final Set<String> wordsInName = new HashSet<>(splitByWhitespace(getNameFromPerson(person).toLowerCase()));
-            for(String keyword: keywords) {
-                if(wordsInName.stream().anyMatch(word -> word.startsWith(keyword))) {
-                    matchedPersons.add(person);
-                    break;
-                }
-            }
+            containsKeywords(keywords, matchedPersons, person);
         }
         return matchedPersons;
+    }
+
+    private static void containsKeywords(Collection<String> keywords, ArrayList<HashMap<String, String>> matchedPersons, HashMap<String, String> person) {
+        final Set<String> wordsInName = new HashSet<>(splitByWhitespace(getNameFromPerson(person).toLowerCase()));
+        for(String keyword: keywords) {
+            if(wordsInName.stream().anyMatch(word -> word.startsWith(keyword))) {
+                matchedPersons.add(person);
+                break;
+            }
+        }
     }
 
     /**

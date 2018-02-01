@@ -49,7 +49,7 @@
   find
   # should match suffixes in person names
   find Bet
-  # matching should not be case-sensitive
+  # matching should not case-insensitive
   find adam Betsy
   # does not match if none have keyword
   find 23912039120
